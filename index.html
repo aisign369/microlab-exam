@@ -546,7 +546,11 @@
       if (!state.history.length) { showToast('Complete an exam before exporting results.'); return; }
       const payload = { exportedAt:new Date().toISOString(), app:'MicroLab Exam', results:state.history, mistakeHistory:state.mistakes };
       const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = 'microlab-exam-results.json'; link.click(); URL.revokeObjectURL(url);
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url; link.download = 'microlab-exam-results.json';
+      document.body.appendChild(link); link.click(); link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
       showToast('Results exported.');
     }
 
